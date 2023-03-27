@@ -356,7 +356,7 @@ def draw_networkx_nodes(
     node_shape :  string or array of strings (default='o')
         The shape of the node.  Specification is as matplotlib.scatter
         marker, one of 'so^>v<dph8'. This can be a single shape, in which case
-        it will be applied to all nodes. Otherwise if it is an array, the
+        it will be applied to all nodes. Otherwise if it is an array, the 
         elements of node_shape will be applied to the shapes in order.
 
     alpha : float or array of floats (default=None)
@@ -433,25 +433,21 @@ def draw_networkx_nodes(
         alpha = None
 
     if isinstance(node_shape, list):
-        for i, s in enumerate(node_shape):
+        for i,s in enumerate(node_shape):
             node_collection = ax.scatter(
                 xy[i, 0],
                 xy[i, 1],
-                s=node_size[i] if isinstance(node_size, list) else node_size,
-                c=node_color[i] if isinstance(node_color, list) else node_color,
+                s=node_size[i] if isinstance(node_size,list) else node_size,
+                c=node_color[i] if isinstance(node_color,list) else node_color,
                 marker=s,
-                cmap=cmap[i] if isinstance(cmap, list) else cmap,
+                cmap=cmap[i] if isinstance(cmap,list) else cmap,
                 vmin=vmin,
                 vmax=vmax,
-                alpha=alpha[i] if isinstance(alpha, list) else alpha,
-                linewidths=(
-                    linewidths[i] if isinstance(linewidths, list) else linewidths
-                ),
-                edgecolors=(
-                    edgecolors[i] if isinstance(edgecolors, list) else edgecolors
-                ),
-                label=label[i] if isinstance(label, list) else label,
-            )
+                alpha=alpha[i] if isinstance(alpha,list) else alpha,
+                linewidths=linewidths[i] if isinstance(linewidths,list) else linewidths,
+                edgecolors=edgecolors[i] if isinstance(edgecolors,list) else edgecolors,
+                label=label[i] if isinstance(label,list) else label,
+                )
     else:
         node_collection = ax.scatter(
             xy[:, 0],
@@ -484,7 +480,6 @@ def draw_networkx_nodes(
 
     node_collection.set_zorder(2)
     return node_collection
-
 
 def draw_networkx_edges(
     G,
@@ -845,7 +840,7 @@ def draw_networkx_edges(
                 # Scale each factor of each arrow based on arrowsize list
                 mutation_scale = arrowsize[i]
 
-            if np.iterable(node_shape):  # multiple node shapes
+            if isinstance(node_shape, list): #multiple node shapes 
                 source, target = edgelist[i][:2]
                 source_node_shape = node_shape[nodelist.index(source)]
                 target_node_shape = node_shape[nodelist.index(target)]
@@ -853,16 +848,14 @@ def draw_networkx_edges(
                 source_node_shape = node_shape
                 target_node_shape = node_shape
 
-            if np.iterable(node_size):  # many node sizes
+            if isinstance(node_size, list): # many node sizes
                 source, target = edgelist[i][:2]
                 source_node_size = node_size[nodelist.index(source)]
                 target_node_size = node_size[nodelist.index(target)]
                 shrink_source = to_marker_edge(source_node_size, source_node_shape)
                 shrink_target = to_marker_edge(target_node_size, target_node_shape)
             else:
-                shrink_source = shrink_target = to_marker_edge(
-                    node_size, source_node_shape
-                )
+                shrink_source = shrink_target = to_marker_edge(node_size, source_node_shape)
 
             if shrink_source < min_source_margin:
                 shrink_source = min_source_margin
